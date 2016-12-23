@@ -10,11 +10,14 @@ var count;
 var panel;
 var countIncreasing; // boolean
 
+var scl;
+
 // TODO: add explosions
 var x, y;
 
 function setup() {
-    var canvas = createCanvas(1000, 1000);
+    scl = (windowHeight >= 1000) ? 1000 : windowHeight/1000;
+    var canvas = createCanvas(windowHeight, windowHeight);
     canvas.parent('canvas-container');
 
     // Load assets
@@ -35,6 +38,8 @@ function setup() {
 }
 
 function draw() {
+    push();
+    scale(scl);
     imageMode(CORNER);
     angle = 0;
 
@@ -51,7 +56,6 @@ function draw() {
 
         ellipse (885, 145, 150, 150);
     }
-
     //Second panel
     if (panel == 2) {
         //tint(255, 20);
@@ -67,7 +71,6 @@ function draw() {
         image(halfmoon, 0, 0);
         pop();
     }
-
     // Third panel
     if (panel == 3) {
         noStroke();
@@ -118,6 +121,7 @@ function draw() {
             480, 300,
             map(mouseX, 0, width, 320, 450)+ 20, map(mouseY, 0, height, 260, 380));
     }
+    pop();
 }
 
 // Other functions
@@ -128,23 +132,20 @@ function adjustCount() {
         countIncreasing = true;
     }
 
-    if (countIncreasing) {
-        count++;
-    } else {
-        count--;
-    }
+    count = countIncreasing ? count+1 : count-1;
+
 }
 
 function mousePressed() {
-    if (panel == 1 && dist (885, 145, mouseX, mouseY) < 75) {
+    if (panel == 1 && dist (885*scl, 145*scl, mouseX, mouseY) < 75) {
         panel = 2;
     }
-    if (panel == 2 && dist (335, 300, mouseX, mouseY) < 35) {
+    if (panel == 2 && dist (335*scl, 300*scl, mouseX, mouseY) < 35) {
         panel = 3;
         imageMode(CORNER);
         image (img3, 0, 0);
     }
-    if (panel == 3 && dist (787, 215, mouseX, mouseY) < 185) {
+    if (panel == 3 && dist (787*scl, 215*scl, mouseX, mouseY) < 185) {
         panel = 1;
     }
 }
