@@ -13,17 +13,12 @@ var countIncreasing; // boolean
 
 var scl;
 
-// TODO: add explosions
 var x, y;
 
 /*******************************************
-*  setup and draw
-*******************************************/
-function setup() {
-    scl = (windowHeight >= 1000) ? 1000 : windowHeight/1000;
-    var canvas = createCanvas(windowHeight, windowHeight);
-    canvas.parent('canvas-container');
-
+ *  setup and draw
+ *******************************************/
+function preload() {
     // Load assets
     img1 = loadImage("img/img.png");
     img2 = loadImage("img/img2.png");
@@ -31,11 +26,15 @@ function setup() {
     img3masked = loadImage("img/img3.png");
     eye = loadImage("img/eye.png");
     halfmoon = loadImage("img/halfmoon.png");
-    mask = loadImage("img/planetmask.png");
-    // img3masked.mask(mask);
-    img3masked.mask(mask)
+    mask = loadImage("img/mask.png");
+}
+function setup() {
+    scl = (windowHeight >= 1000) ? 1000 : windowHeight/1000;
+    var canvas = createCanvas(windowHeight, windowHeight);
+    canvas.parent('canvas-container');
 
-    panel = 1;
+    img3masked.mask(mask);
+    panel = 3;
 
     count = 0;
     countIncreasing = true;
@@ -84,11 +83,6 @@ function draw() {
         rect(0, height - 325, 1000, 325);
 
 
-
-
-
-        // Draw image mask on top
-        image (img3masked, 0, 0);
         //Handle explosions
         for (var i = 0; i < explosions.length; i++) {
             var exp = explosions[i];
@@ -102,6 +96,8 @@ function draw() {
         if (frameCount % 2 == 0) {
             explosions.push(new Explosion());
         }
+        // Draw image mask on top
+        image (img3masked, 0, 0);
 
         adjustCount();
         imageMode(CENTER);
@@ -130,8 +126,8 @@ function draw() {
 }
 
 /*******************************************
-*  Event Handling
-*******************************************/
+ *  Event Handling
+ *******************************************/
 function adjustCount() {
     if (count >= 225) {
         countIncreasing = false;
@@ -157,11 +153,11 @@ function mousePressed() {
     }
 }
 /*******************************************
-*  Explosion class
-*******************************************/
+ *  Explosion class
+ *******************************************/
 function Explosion() {
     this.x = random(width);
-    this.y = random(700*scl, height);
+    this.y = random(height/2, height);
     this.r = 0;
     this.r_goal = random(20, 150);
     this.alp = 255;
