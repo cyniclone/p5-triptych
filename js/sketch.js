@@ -80,7 +80,7 @@ function draw() {
 
         // Fill in a green rectangle #30b997
         fill ("#30b997");
-        rect(0, height - 325, 1000, 325);
+        rect(0, height/scl - 325, 1000, 325);
 
 
         //Handle explosions
