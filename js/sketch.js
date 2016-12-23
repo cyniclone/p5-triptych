@@ -1,5 +1,6 @@
 var img1, img2, img3;
 var eye, halfmoon;
+var explosions = [];
 
 var mask;
 var img3masked;
@@ -15,6 +16,9 @@ var scl;
 // TODO: add explosions
 var x, y;
 
+/*******************************************
+*  setup and draw
+*******************************************/
 function setup() {
     scl = (windowHeight >= 1000) ? 1000 : windowHeight/1000;
     var canvas = createCanvas(windowHeight, windowHeight);
@@ -80,23 +84,24 @@ function draw() {
         rect(0, height - 325, 1000, 325);
 
 
-        //Make explosions
-        // for (int i = 0; i < explosions.size (); i++) {
-        //     Explosion exp = explosions.get(i);
-        //
-        //     exp.plus();
-        //     exp.display();
-        //     if (exp.finished()) {
-        //         explosions.remove(i);
-        //     }
-        // }
-        // if (frameCount % 2 == 0) {
-        //     explosions.add(new Explosion(random(width), random(height)));
-        // }
+
 
 
         // Draw image mask on top
         image (img3masked, 0, 0);
+        //Handle explosions
+        for (var i = 0; i < explosions.length; i++) {
+            var exp = explosions[i];
+
+            exp.plus();
+            exp.display();
+            if (exp.finished()) {
+                explosions.splice(i, 1);
+            }
+        }
+        if (frameCount % 2 == 0) {
+            explosions.push(new Explosion());
+        }
 
         adjustCount();
         imageMode(CENTER);
@@ -124,7 +129,9 @@ function draw() {
     pop();
 }
 
-// Other functions
+/*******************************************
+*  Event Handling
+*******************************************/
 function adjustCount() {
     if (count >= 225) {
         countIncreasing = false;
@@ -147,5 +154,40 @@ function mousePressed() {
     }
     if (panel == 3 && dist (787*scl, 215*scl, mouseX, mouseY) < 185) {
         panel = 1;
+    }
+}
+/*******************************************
+*  Explosion class
+*******************************************/
+function Explosion() {
+    this.x = random(width);
+    this.y = random(700*scl, height);
+    this.r = 0;
+    this.r_goal = random(20, 150);
+    this.alp = 255;
+    this.life = 200;
+    this.green = random(50, 255);
+
+    this.plus = function() {
+        this.r ++;
+        if (this.r > this.r_goal) {
+            this.r = this.r_goal;
+            this.alp -= 5;
+        }
+    }
+
+    this.display = function() {
+        noStroke();
+        fill(255, this.green, 0, this.alp);
+        ellipse(this.x, this.y, this.r, this.r);
+    }
+
+    this.finished = function() {
+        this.life--;
+        if (this.life < 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
