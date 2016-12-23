@@ -12,7 +12,6 @@ var panel;
 var countIncreasing; // boolean
 
 var scl;
-
 var x, y;
 
 /*******************************************
@@ -29,12 +28,14 @@ function preload() {
     mask = loadImage("img/mask.png");
 }
 function setup() {
+    // Dynamically set scale and adjust canvas size/position
     scl = (windowHeight >= 1000) ? 1000 : windowHeight/1000;
     var canvas = createCanvas(windowHeight, windowHeight);
     canvas.parent('canvas-container');
+    $("#canvas-container").css("padding-left", (windowWidth-width)/2 + "px");
 
     img3masked.mask(mask);
-    panel = 3;
+    panel = 1;
 
     count = 0;
     countIncreasing = true;
@@ -61,10 +62,7 @@ function draw() {
     }
     //Second panel
     if (panel == 2) {
-        //tint(255, 20);
         image (img2, 0, 0);
-
-        //tint(255, 255);
 
         // Draw half-moon
         push();
@@ -81,7 +79,6 @@ function draw() {
         // Fill in a green rectangle #30b997
         fill ("#30b997");
         rect(0, height/scl - 325, 1000, 325);
-
 
         //Handle explosions
         for (var i = 0; i < explosions.length; i++) {
